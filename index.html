@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2-Minute AI Value Calculator for Tourism</title>
+    <title>Tourism AI Calculator - No Math Required!</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f7f5;
@@ -17,308 +17,498 @@
         h1, h2, h3 {
             color: #246c46; /* Pounamu green */
         }
-        .calculator {
+        .calculator-container {
             background-color: white;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        .result {
-            background-color: #e6f2ec; /* Light pounamu */
-            border-left: 5px solid #246c46; /* Pounamu green */
+        .step {
+            margin-bottom: 25px;
             padding: 15px;
-            margin-top: 20px;
-            border-radius: 0 10px 10px 0;
+            border-radius: 8px;
+            background-color: #f0f7f0;
         }
-        .business-impact {
-            background-color: #f0f7e6; /* Light complementary green */
-            border-left: 5px solid #3d8a5f; /* Darker pounamu */
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 0 10px 10px 0;
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #246c46;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
         }
-        input {
-            padding: 8px;
-            margin: 8px 0;
+        .step-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #246c46;
+            display: inline-block;
+            vertical-align: 7px;
+        }
+        select, input {
+            padding: 10px;
+            margin: 10px 0;
             width: 100%;
-            box-sizing: border-box;
+            max-width: 400px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 16px;
         }
         button {
-            background-color: #246c46; /* Pounamu green */
+            background-color: #246c46;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 12px 20px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
+            font-weight: bold;
+            margin: 20px 0;
         }
         button:hover {
-            background-color: #1a5234; /* Darker pounamu */
+            background-color: #1a5234;
         }
-        .option {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid #ddd;
-        }
-        .option h3 {
-            margin-top: 0;
-        }
-        .savings {
-            font-weight: bold;
-            color: #246c46; /* Pounamu green */
-            font-size: 18px;
-        }
-        .sales-required {
-            font-weight: bold;
-            color: #3d8a5f; /* Darker pounamu */
-            font-size: 18px;
-        }
-        .claude-prompt {
-            background-color: #e9f0ed; /* Very light pounamu */
-            border-left: 5px solid #246c46; /* Pounamu green */
-            padding: 15px;
+        .results {
+            background-color: #e6f2ec;
+            border-left: 5px solid #246c46;
+            padding: 20px;
             margin: 20px 0;
             border-radius: 0 10px 10px 0;
+        }
+        .explanation {
+            font-size: 15px;
+            color: #555;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .slider-container {
+            margin: 15px 0;
+        }
+        .slider {
+            width: 100%;
+            max-width: 400px;
+        }
+        .slider-value {
+            font-weight: bold;
+            color: #246c46;
+            margin-left: 10px;
+        }
+        .recommendation-box {
+            background-color: #f0f7f0;
+            border: 1px solid #246c46;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .comparison-table th {
+            background-color: #246c46;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+        .comparison-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f8f4;
+        }
+        .benefit {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        .benefit:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #246c46;
+            font-weight: bold;
+        }
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #246c46;
+            color: white;
+            text-align: center;
+            line-height: 18px;
+            border-radius: 50%;
+            margin-left: 5px;
+            font-size: 12px;
+            cursor: help;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: normal;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
         .footnote {
             font-size: 14px;
             color: #666;
             font-style: italic;
             margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
         }
-        .tabs {
-            display: flex;
-            margin-bottom: 15px;
-        }
-        .tab {
-            padding: 10px 15px;
-            background-color: #e6f2ec; /* Light pounamu */
-            border: 1px solid #246c46; /* Pounamu green */
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
-            cursor: pointer;
-        }
-        .tab.active {
-            background-color: #246c46; /* Pounamu green */
-            color: white;
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo img {
-            max-width: 200px;
-            height: auto;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #246c46; /* Pounamu green */
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+        @media (max-width: 768px) {
+            .comparison-table {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <!-- Replace with your actual logo path -->
-            <!-- <img src="your-logo.png" alt="Michael W Gibbons - AI Business Automation Coach"> -->
-        </div>
-        <h1>2-Minute AI Value Calculator for Tourism Businesses</h1>
-        <p>Discover how AI can transform your tourism business finances</p>
-    </div>
+    <h1>Tourism Business AI Calculator</h1>
+    <p>Find out how AI can save your tourism business time and money - <strong>no complex math required!</strong></p>
     
-    <div class="calculator">
-        <h2>Calculate Your Potential AI Staffing Savings</h2>
-        <p>Enter your current staffing costs and see how AI could transform your tourism business:</p>
-        
-        <div>
-            <label for="currentStaffCost">Current annual staff cost for role ($):</label>
-            <input type="number" id="currentStaffCost" placeholder="e.g., 90000" value="90000">
-        </div>
-        
-        <div>
-            <label for="hoursAICanHandle">Hours AI could handle weekly (out of 40):</label>
-            <input type="number" id="hoursAICanHandle" placeholder="e.g., 10, 20, 30" value="30">
-        </div>
-        
-        <div>
-            <label for="annualAICost">Annual AI solution cost ($):</label>
-            <input type="number" id="annualAICost" placeholder="e.g., 5000" value="5000">
+    <div class="calculator-container">
+        <div class="step">
+            <span class="step-number">1</span>
+            <span class="step-title">Select your business role</span>
+            <div>
+                <select id="roleSelector" onchange="updateRoleData()">
+                    <option value="select">I want to see how AI could help with...</option>
+                    <option value="mktMgr">Marketing Manager position</option>
+                    <option value="salesMgr">Sales Manager position</option>
+                    <option value="owner">My own time as Owner/Operator</option>
+                    <option value="pa">Personal Assistant/Admin role</option>
+                    <option value="financeMgr">Finance Manager position</option>
+                    <option value="accountsMgr">Accounts Manager position</option>
+                    <option value="trainingMgr">Training Manager position</option>
+                    <option value="hrMgr">HR Manager position</option>
+                    <option value="contractor">External contractor services</option>
+                </select>
+                <p class="explanation">Choose the position you'd like to analyze for potential AI savings</p>
+            </div>
         </div>
         
-        <div>
-            <label for="grossProfit">Your business gross profit margin (%):</label>
-            <input type="number" id="grossProfit" placeholder="e.g., 30" value="30">
+        <div class="step">
+            <span class="step-number">2</span>
+            <span class="step-title">Annual cost for this role</span>
+            <div>
+                <div class="slider-container">
+                    <span>$50,000</span>
+                    <input type="range" id="annualSalary" min="50000" max="150000" step="5000" value="90000" class="slider" oninput="updateSalaryValue()">
+                    <span>$150,000</span>
+                    <span class="slider-value" id="salaryValue">$90,000</span>
+                </div>
+                <p class="explanation">Slide to match what you pay annually for this role (salary or contract)</p>
+            </div>
         </div>
         
-        <button onclick="calculateSavings()">Calculate Savings</button>
-        
-        <div class="result" id="results">
-            <p>Enter your values above and click "Calculate Savings" to see your potential annual savings with AI.</p>
+        <div class="step">
+            <span class="step-number">3</span>
+            <span class="step-title">How much of this role could AI handle?</span>
+            <div>
+                <div class="slider-container">
+                    <span>10%</span>
+                    <input type="range" id="aiPercentage" min="10" max="80" value="30" class="slider" oninput="updateAIPercentage()">
+                    <span>80%</span>
+                    <span class="slider-value" id="percentageValue">30%</span>
+                </div>
+                <p class="explanation">Based on tourism businesses I've worked with, AI typically handles between 25-40% of most roles</p>
+            </div>
         </div>
         
-        <div class="business-impact" id="businessImpact" style="display: none;">
-            <h3>Business Impact Analysis</h3>
-            <p>This section helps you understand the real business impact of your AI investment:</p>
-            <div id="businessImpactResults"></div>
+        <button onclick="calculateResults()">Show Me The Results</button>
+        
+        <div class="results" id="results" style="display: none;">
+            <h3>Your AI Opportunity</h3>
+            <div id="resultsContent"></div>
         </div>
     </div>
     
-    <h2>Three AI Staffing Approaches for Tourism Businesses</h2>
-    
-    <div class="option">
-        <h3>Option 1: Traditional Approach</h3>
-        <p>Full-time Marketing & Sales Manager (40 hrs/week) = $90,000/year</p>
-        <p><strong>Total Annual Cost: $90,000</strong></p>
+    <div id="roleRecommendations" class="recommendation-box" style="display: none;">
+        <h3>What AI Could Do For This Role</h3>
+        <div id="recommendationsContent"></div>
     </div>
     
-    <div class="option">
-        <h3>Option 2: AI-Enhanced Hybrid Approach</h3>
-        <p>Part-time Marketing & Sales Manager (30 hrs/week) = $67,500/year</p>
-        <p>AI Copilot Support (subscription & setup) = $5,000/year</p>
-        <p><strong>Total Annual Cost: $72,500</strong></p>
-        <p class="savings">Annual Savings: $17,500</p>
-        <p class="sales-required">Additional sales required to cover AI cost (30% GP): $16,667</p>
+    <h2>Understanding What This Calculator Shows You</h2>
+    
+    <div class="comparison-table">
+        <h3>The Simple Truth About AI Investment</h3>
+        <table>
+            <tr>
+                <th>Traditional Business Thinking</th>
+                <th>Smart AI Approach</th>
+            </tr>
+            <tr>
+                <td>"I need to hire another person"</td>
+                <td>"I can implement AI to handle routine tasks"</td>
+            </tr>
+            <tr>
+                <td>$90,000+ annual cost</td>
+                <td>$5,000-15,000 annual cost</td>
+            </tr>
+            <tr>
+                <td>Need to generate $300,000+ in additional sales</td>
+                <td>Immediate savings without selling more</td>
+            </tr>
+            <tr>
+                <td>Employee availability: 40 hours/week</td>
+                <td>AI availability: 24/7/365</td>
+            </tr>
+            <tr>
+                <td>Staffing shortages are a constant challenge</td>
+                <td>AI is always available and consistent</td>
+            </tr>
+        </table>
     </div>
     
-    <div class="option">
-        <h3>Option 3: AI-Maximized Approach</h3>
-        <p>AI Marketing & Sales Copilot (24/7 availability) = $10,000/year</p>
-        <p>Human oversight & strategy (5 hrs/week) = $11,250/year</p>
-        <p><strong>Total Annual Cost: $21,250</strong></p>
-        <p class="savings">Annual Savings: $68,750</p>
-        <p class="sales-required">Additional sales required to cover AI cost (30% GP): $33,333</p>
+    <h2>Common Questions Tourism Operators Ask</h2>
+    
+    <div class="step">
+        <p><strong>Will AI replace my staff?</strong></p>
+        <p>No - AI handles routine tasks while your team focuses on what machines can't do: authentic human connection, creative problem-solving, and delivering exceptional experiences that keep visitors coming back.</p>
     </div>
     
-    <h2>The Business Reality: Cost vs Sales Perspective</h2>
-    <p>When considering any business investment, there are two ways to look at the financial impact:</p>
-    
-    <div class="option">
-        <h3>Cost Reduction Perspective</h3>
-        <p>The savings from AI implementation directly improve your bottom line without requiring additional sales.</p>
-        <p>For Option 2 above: <strong>$17,500 annual savings</strong> is pure profit improvement.</p>
+    <div class="step">
+        <p><strong>Do I need to be technical to implement AI?</strong></p>
+        <p>Not at all. Modern AI tools are designed for non-technical users. If you can use a smartphone, you can use these AI tools. Many tourism operators I work with had zero technical experience before implementation.</p>
     </div>
     
-    <div class="option">
-        <h3>Sales Generation Perspective</h3>
-        <p>To achieve the same profit improvement through sales alone:</p>
-        <p><strong>Required Additional Sales = Desired Profit ÷ Gross Profit Margin</strong></p>
-        <p>For a business with 30% gross profit margin to generate $17,500 in additional profit:</p>
-        <p>Required Additional Sales = $17,500 ÷ 0.30 = <strong>$58,333 in new sales</strong></p>
-        <p>This means your AI investment of $5,000 that saves $17,500 is equivalent to generating <strong>$58,333 in new sales</strong>.</p>
+    <div class="step">
+        <p><strong>How quickly will I see results?</strong></p>
+        <p>Most tourism businesses see measurable time savings within the first week and financial impact within the first month. The calculator above shows your potential annual savings.</p>
     </div>
     
-    <h2>Use This Claude Prompt for Your Own AI Value Assessment</h2>
-    
-    <div class="claude-prompt">
-        <p>Here's a prompt you can copy and paste to Claude or ChatGPT to help evaluate which AI implementations would be most valuable for your specific tourism business:</p>
-        <pre>
-I run a tourism business specializing in [YOUR SPECIALTY]. 
-I'm considering implementing AI to improve our operations.
-
-Current staffing information:
-- Role I'm evaluating: [ROLE]
-- Annual salary cost: $[AMOUNT]
-- Key responsibilities: [LIST MAIN TASKS]
-- Weekly hours spent on this role: [HOURS]
-- Our business gross profit margin: [X]%
-
-Please help me calculate potential savings with AI implementation:
-1. Identify which responsibilities could be fully or partially handled by AI
-2. Estimate percentage of time that could be saved with AI
-3. Calculate potential annual savings based on:
-   - Reduced staffing hours
-   - AI implementation costs
-   - New revenue opportunities
-4. Calculate how much additional sales I would need to generate to 
-   achieve the same profit improvement through growth alone
-5. Recommend the most practical AI implementation approach 
-   (hybrid human-AI or primarily AI-driven)
-6. Suggest specific AI tools for my tourism business
-        </pre>
-    </div>
+    <h2>Ready To Transform Your Tourism Business?</h2>
+    <p>Book a free 30-minute AI consultation to discuss your specific tourism business needs and get personalized recommendations.</p>
+    <button onclick="window.location.href='https://calendly.com/mike-gibbo/ai-collaboration-invite'">Book Your Free Consultation</button>
     
     <p class="footnote">© 2025 Michael W Gibbons, AI Business Automation Coach for Tourism Operators. All rights reserved. This calculator provides estimates only - actual results may vary based on your specific business needs and implementation quality.</p>
     
     <script>
-        function calculateSavings() {
-            // Get input values
-            const currentStaffCost = parseFloat(document.getElementById('currentStaffCost').value) || 0;
-            const hoursAICanHandle = parseFloat(document.getElementById('hoursAICanHandle').value) || 0;
-            const annualAICost = parseFloat(document.getElementById('annualAICost').value) || 0;
-            const grossProfitMargin = parseFloat(document.getElementById('grossProfit').value) || 30;
-            const grossProfitDecimal = grossProfitMargin / 100;
+        // Role-specific default data
+        const roleDefaults = {
+            mktMgr: {
+                hours: 40,
+                salary: 90000,
+                aiPercentage: 30,
+                recommendations: `
+                    <h3>AI Can Transform Your Marketing Role By:</h3>
+                    <div class="benefit">Creating content for your social media, blogs, and emails that sounds like your authentic brand voice</div>
+                    <div class="benefit">Analyzing visitor data to identify patterns and opportunities your human team might miss</div>
+                    <div class="benefit">Personalizing marketing for different visitor segments automatically</div>
+                    <div class="benefit">Generating reports and insights that would take your team hours to produce manually</div>
+                    <p><strong>Real Example:</strong> A Queenstown adventure tourism operator reduced their marketing manager's hours by 15 hours weekly while increasing their content output by 300% and improving conversion rates by 24%.</p>
+                `
+            },
+            salesMgr: {
+                hours: 40,
+                salary: 85000,
+                aiPercentage: 25,
+                recommendations: `
+                    <h3>AI Can Transform Your Sales Role By:</h3>
+                    <div class="benefit">Following up with every lead quickly and consistently - no prospects falling through the cracks</div>
+                    <div class="benefit">Personalizing communications to different customer types based on their interests</div>
+                    <div class="benefit">Identifying which leads are most likely to book, helping your team focus on the right prospects</div>
+                    <div class="benefit">Creating customized quotes and itineraries in seconds instead of hours</div>
+                    <p><strong>Real Example:</strong> A Bay of Islands sailing operator automated 30% of their sales process, allowing their sales manager to handle twice as many inquiries while improving conversion rates by 18%.</p>
+                `
+            },
+            owner: {
+                hours: 60,
+                salary: 120000,
+                aiPercentage: 33,
+                recommendations: `
+                    <h3>AI Can Give You Back Valuable Time By:</h3>
+                    <div class="benefit">Handling routine email correspondence and inquiries that consume hours of your day</div>
+                    <div class="benefit">Creating business documents, proposals, and reports in minutes instead of hours</div>
+                    <div class="benefit">Monitoring competitor activities and market trends without you having to research</div>
+                    <div class="benefit">Providing quick business insights when you need to make decisions</div>
+                    <p><strong>Real Example:</strong> A Taupo tourism business owner recovered 20+ hours weekly by implementing AI tools, allowing them to focus on growth strategies that increased revenue by 32% in six months.</p>
+                `
+            },
+            pa: {
+                hours: 40,
+                salary: 60000,
+                aiPercentage: 40,
+                recommendations: `
+                    <h3>AI Can Transform Your Admin Role By:</h3>
+                    <div class="benefit">Managing calendars, scheduling, and appointment coordination automatically</div>
+                    <div class="benefit">Drafting emails and correspondence that sound just like you wrote them</div>
+                    <div class="benefit">Organizing documents, files, and information for easy retrieval</div>
+                    <div class="benefit">Taking meeting notes and extracting action items automatically</div>
+                    <p><strong>Real Example:</strong> A Rotorua cultural tourism provider reduced their admin costs by 40% while improving response times to customer inquiries from hours to minutes.</p>
+                `
+            },
+            financeMgr: {
+                hours: 40,
+                salary: 95000,
+                aiPercentage: 35,
+                recommendations: `
+                    <h3>AI Can Transform Your Finance Role By:</h3>
+                    <div class="benefit">Automating financial reporting and analysis that currently takes days</div>
+                    <div class="benefit">Forecasting cash flow and identifying potential issues before they arise</div>
+                    <div class="benefit">Creating visual presentations of financial data for easier understanding</div>
+                    <div class="benefit">Monitoring expenses and identifying cost-saving opportunities</div>
+                    <p><strong>Real Example:</strong> A Wellington tourism operator automated 35% of their financial processes, reducing reporting time from 3 days to 2 hours while improving accuracy.</p>
+                `
+            },
+            accountsMgr: {
+                hours: 40,
+                salary: 75000,
+                aiPercentage: 45,
+                recommendations: `
+                    <h3>AI Can Transform Your Accounting Role By:</h3>
+                    <div class="benefit">Processing invoices and receipts automatically without manual data entry</div>
+                    <div class="benefit">Reconciling accounts and identifying discrepancies that humans might miss</div>
+                    <div class="benefit">Generating financial statements and reports with a single command</div>
+                    <div class="benefit">Managing accounts payable/receivable with automated followups</div>
+                    <p><strong>Real Example:</strong> A Christchurch tour company reduced their accounting staff hours by 50% while improving financial record accuracy from 92% to 99.7%.</p>
+                `
+            },
+            trainingMgr: {
+                hours: 40,
+                salary: 80000,
+                aiPercentage: 40,
+                recommendations: `
+                    <h3>AI Can Transform Your Training Role By:</h3>
+                    <div class="benefit">Creating personalized training materials for different learning styles and roles</div>
+                    <div class="benefit">Developing interactive learning experiences that staff can access anytime</div>
+                    <div class="benefit">Tracking staff progress and identifying areas needing additional support</div>
+                    <div class="benefit">Translating training materials into multiple languages for international staff</div>
+                    <p><strong>Real Example:</strong> A Queenstown adventure tourism company reduced their training development time by 70% while improving staff knowledge retention by 42%.</p>
+                `
+            },
+            hrMgr: {
+                hours: 40,
+                salary: 85000,
+                aiPercentage: 35,
+                recommendations: `
+                    <h3>AI Can Transform Your HR Role By:</h3>
+                    <div class="benefit">Screening job applications to identify the best candidates faster</div>
+                    <div class="benefit">Creating personalized onboarding experiences for new staff</div>
+                    <div class="benefit">Managing routine HR documentation and compliance requirements</div>
+                    <div class="benefit">Analyzing staff feedback to identify improvement opportunities</div>
+                    <p><strong>Real Example:</strong> An Auckland tourism operator reduced their recruitment time by 65% while improving new hire retention by 28% using AI-enhanced HR processes.</p>
+                `
+            },
+            contractor: {
+                hours: 20,
+                salary: 50000,
+                aiPercentage: 75,
+                recommendations: `
+                    <h3>AI Can Replace Most Contractor Services By:</h3>
+                    <div class="benefit">Creating professional social media content and managing posting schedules</div>
+                    <div class="benefit">Developing website content and blog articles that engage visitors</div>
+                    <div class="benefit">Designing basic marketing materials and visual content</div>
+                    <div class="benefit">Managing email marketing campaigns and newsletter content</div>
+                    <p><strong>Real Example:</strong> A Wanaka-based tour company replaced their $48,000 annual social media contractor with a $6,000 AI system that produced 3x more content with better engagement rates.</p>
+                `
+            }
+        };
+        
+        function updateRoleData() {
+            const selectedRole = document.getElementById('roleSelector').value;
+            if (selectedRole !== 'select' && roleDefaults[selectedRole]) {
+                const roleData = roleDefaults[selectedRole];
+                document.getElementById('annualSalary').value = roleData.salary;
+                document.getElementById('aiPercentage').value = roleData.aiPercentage;
+                updateSalaryValue();
+                updateAIPercentage();
+            }
+        }
+        
+        function updateSalaryValue() {
+            const salary = document.getElementById('annualSalary').value;
+            document.getElementById('salaryValue').textContent = '$' + parseInt(salary).toLocaleString();
+        }
+        
+        function updateAIPercentage() {
+            const percentage = document.getElementById('aiPercentage').value;
+            document.getElementById('percentageValue').textContent = percentage + '%';
+        }
+        
+        function calculateResults() {
+            const selectedRole = document.getElementById('roleSelector').value;
+            if (selectedRole === 'select') {
+                alert("Please select a business role first!");
+                return;
+            }
+            
+            const annualSalary = parseFloat(document.getElementById('annualSalary').value);
+            const aiPercentage = parseFloat(document.getElementById('aiPercentage').value);
+            
+            // Calculate estimated AI cost based on role and percentage
+            const baseAICost = selectedRole === 'contractor' ? 5000 : 8000;
+            const aiCost = baseAICost + (aiPercentage > 40 ? (aiPercentage - 40) * 200 : 0);
             
             // Calculate savings
-            const hourlyRate = currentStaffCost / (40 * 52); // assuming 40hr week, 52 weeks
-            const humanHoursRemaining = 40 - hoursAICanHandle;
-            const newHumanCost = hourlyRate * humanHoursRemaining * 52;
-            const totalNewCost = newHumanCost + annualAICost;
-            const annualSavings = currentStaffCost - totalNewCost;
+            const annualSavings = (annualSalary * (aiPercentage / 100));
+            const roi = ((annualSavings - aiCost) / aiCost) * 100;
             
-            // Calculate fully AI-driven approach (minimal human oversight)
-            const minimalHumanHours = 5; // 5 hours per week for oversight
-            const minimalHumanCost = hourlyRate * minimalHumanHours * 52;
-            const fullAICost = 10000; // estimated cost for comprehensive AI solution
-            const fullAITotalCost = minimalHumanCost + fullAICost;
-            const fullAISavings = currentStaffCost - fullAITotalCost;
-            
-            // Calculate equivalent sales required
-            const salesRequiredForAI = annualAICost / grossProfitDecimal;
-            const salesRequiredForSameProfit = annualSavings / grossProfitDecimal;
-            const fullAISalesRequired = fullAICost / grossProfitDecimal;
-            const salesForFullAISavings = fullAISavings / grossProfitDecimal;
+            // Sales equivalent at 30% gross profit
+            const salesEquivalent = annualSavings / 0.3;
             
             // Display results
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = `
-                <h3>Your Potential AI Savings:</h3>
-                <p><strong>Hybrid Approach (${hoursAICanHandle} AI hrs/week):</strong></p>
-                <p>New human cost: $${newHumanCost.toFixed(2)}/year</p>
-                <p>AI solution cost: $${annualAICost.toFixed(2)}/year</p>
-                <p>Total new cost: $${totalNewCost.toFixed(2)}/year</p>
-                <p class="savings">Annual savings: $${annualSavings.toFixed(2)}</p>
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('roleRecommendations').style.display = 'block';
+            
+            const roleName = document.getElementById('roleSelector').options[document.getElementById('roleSelector').selectedIndex].text;
+            
+            const resultsContent = document.getElementById('resultsContent');
+            resultsContent.innerHTML = `
+                <h4>For Your ${roleName}</h4>
+                <p>Based on your inputs, AI could potentially:</p>
                 
-                <p><strong>AI-Maximized Approach (35 AI hrs/week):</strong></p>
-                <p>Minimal human oversight: $${minimalHumanCost.toFixed(2)}/year</p>
-                <p>Comprehensive AI solution: $${fullAICost.toFixed(2)}/year</p>
-                <p>Total cost: $${fullAITotalCost.toFixed(2)}/year</p>
-                <p class="savings">Annual savings: $${fullAISavings.toFixed(2)}</p>
+                <ul>
+                    <li>Handle <strong>${aiPercentage}%</strong> of current responsibilities</li>
+                    <li>Save approximately <strong>$${Math.round(annualSavings).toLocaleString()}</strong> annually</li>
+                    <li>Cost around <strong>$${Math.round(aiCost).toLocaleString()}</strong> to implement and maintain yearly</li>
+                    <li>Deliver a <strong>${Math.round(roi)}%</strong> return on your investment</li>
+                </ul>
                 
-                <p>A 2-minute calculation that could save your tourism business thousands!</p>
+                <p>This is equivalent to generating <strong>$${Math.round(salesEquivalent).toLocaleString()}</strong> in additional sales at a 30% gross profit margin.</p>
+                
+                <p><strong>Bottom line:</strong> For every $1 you invest in AI for this role, you'll get approximately $${Math.round(annualSavings/aiCost)} back.</p>
             `;
             
-            // Show business impact section
-            document.getElementById('businessImpact').style.display = 'block';
+            // Display role-specific recommendations
+            if (roleDefaults[selectedRole]) {
+                document.getElementById('recommendationsContent').innerHTML = roleDefaults[selectedRole].recommendations;
+            }
             
-            // Display business impact results
-            const businessImpactResults = document.getElementById('businessImpactResults');
-            businessImpactResults.innerHTML = `
-                <h4>Sales Perspective at ${grossProfitMargin}% Gross Profit Margin:</h4>
-                
-                <p><strong>Hybrid Approach:</strong></p>
-                <p>Additional sales required to cover AI cost: $${salesRequiredForAI.toFixed(2)}</p>
-                <p class="sales-required">Sales needed to generate the same $${annualSavings.toFixed(2)} profit through growth: $${salesRequiredForSameProfit.toFixed(2)}</p>
-                
-                <p><strong>AI-Maximized Approach:</strong></p>
-                <p>Additional sales required to cover comprehensive AI: $${fullAISalesRequired.toFixed(2)}</p>
-                <p class="sales-required">Sales needed to generate the same $${fullAISavings.toFixed(2)} profit through growth: $${salesForFullAISavings.toFixed(2)}</p>
-                
-                <h4>Key Business Insight:</h4>
-                <p>Your AI investment of $${annualAICost.toFixed(2)} that saves $${annualSavings.toFixed(2)} is equivalent to generating <strong>$${salesRequiredForSameProfit.toFixed(2)} in new sales</strong>.</p>
-                
-                <p>This sales equivalent calculation shows why AI investment often delivers better ROI than traditional growth strategies - you would need to generate significantly more revenue to achieve the same profit improvement.</p>
-            `;
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
+        
+        // Initialize with defaults
+        updateSalaryValue();
+        updateAIPercentage();
     </script>
 </body>
 </html>
-<p class="footnote">© 2025 Michael W Gibbons, AI Business Automation Coach. All rights reserved. This calculator provides estimates only - actual results may vary based on your specific business needs and implementation quality.</p>
